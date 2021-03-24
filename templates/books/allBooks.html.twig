@@ -2,7 +2,7 @@
 {% block title %} {% endblock %}
 {% block body %}
     {% for book in books %}
-        {{ book.name }}
+        <a href="#">{{ book.name }}/a><br><br>
         {{ book.author }}
         <br>
     {% endfor %}

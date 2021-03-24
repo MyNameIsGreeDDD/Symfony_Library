@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\BookRepository;
+use App\Repository\BooksRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 
 /**
- * @ORM\Entity(repositoryClass=BookRepository::class)
+ * @ORM\Entity(repositoryClass=BooksRepository::class)
  * @Table(name="books",
  *     schema="public"
  * )
