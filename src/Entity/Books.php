@@ -3,14 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\BooksRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 
 /**
  * @ORM\Entity(repositoryClass=BooksRepository::class)
- * @Table(name="books",
- *     schema="public"
- * )
+ * @Table(name="books")
  */
 class Books
 {
@@ -27,19 +26,21 @@ class Books
     /**
      * @ORM\Column (type="string", nullable=false)
      */
-    private $author;
-    /**
-     * @ORM\Column (type="string", nullable=false)
-     */
     private $description;
     /**
      * @ORM\Column (type="string", nullable=false)
      */
     private $cover;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="integer")
      */
-    private $publication_year;
+    private $publicationYear;
+    /**
+     * @var ArrayCollection
+     *  Many Books have Many Authors.
+     * @ORM\ManyToMany(targetEntity="App\Entity\Author", mappedBy="books")
+     */
+    private $authors;
 
 
     /**
@@ -48,14 +49,6 @@ class Books
     public function setName($name): void
     {
         $this->name = $name;
-    }
-
-    /**
-     * @param mixed $author
-     */
-    public function setAuthor($author): void
-    {
-        $this->author = $author;
     }
 
     /**
@@ -75,11 +68,11 @@ class Books
     }
 
     /**
-     * @param mixed $publication_year
+     * @param mixed $publicationYear
      */
-    public function setPublicationYear($publication_year): void
+    public function setPublicationYear($publicationYear): void
     {
-        $this->publication_year = $publication_year;
+        $this->publicationYear = $publicationYear;
     }
 
     public function getId(): ?int
@@ -93,14 +86,6 @@ class Books
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAuthor()
-    {
-        return $this->author;
     }
 
     /**
@@ -124,6 +109,6 @@ class Books
      */
     public function getPublicationYear()
     {
-        return $this->publication_year;
+        return $this->publicationYear;
     }
 }

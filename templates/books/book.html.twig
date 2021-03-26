@@ -1,7 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block title %} {% endblock %}
 {% block body %}
-    <a href="#">{{ book.name }}/a><br><br>
+    {{ book.name }}
+    <br>
     {{ book.author }}
     <br>
+    {{ book.description }}
+    <br>
+    {{ book.cover }}
 {% endblock %}

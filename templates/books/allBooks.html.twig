@@ -2,8 +2,13 @@
 {% block title %} {% endblock %}
 {% block body %}
     {% for book in books %}
-        <a href="#">{{ book.name }}/a><br><br>
+        <a href="#">{{ book.name }}</a>
+        <br>
         {{ book.author }}
         <br>
+        {{ book.description }}
+        <br>
+        {{ book.cover }}
+        <hr>
     {% endfor %}
 {% endblock %}
