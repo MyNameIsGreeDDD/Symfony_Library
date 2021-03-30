@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\BooksRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Table;
 
@@ -15,10 +16,10 @@ class Books
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
     /**
      * @ORM\Column (type="string", nullable=false)
      */
@@ -36,12 +37,31 @@ class Books
      */
     private $publicationYear;
     /**
-     * @var ArrayCollection
-     *  Many Books have Many Authors.
-     * @ORM\ManyToMany(targetEntity="App\Entity\Author", mappedBy="books")
+     *  Many Books have Many Author.
+     * @ORM\ManyToMany(targetEntity="App\Entity\Author", mappedBy="Books")
      */
-    private $authors;
+    private ArrayCollection $authors;
 
+    public function __construct()
+    {
+        $this->authors = new ArrayCollection();
+    }
+
+    /**
+     * @param ArrayCollection $authors
+     */
+    public function setAuthors(ArrayCollection $authors): void
+    {
+        $this->authors = $authors;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getAuthors(): ArrayCollection
+    {
+        return $this->authors;
+    }
 
     /**
      * @param mixed $name
