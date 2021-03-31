@@ -27,6 +27,10 @@ class Books
     /**
      * @ORM\Column (type="string", nullable=false)
      */
+    private $author;
+    /**
+     * @ORM\Column (type="string", nullable=false)
+     */
     private $description;
     /**
      * @ORM\Column (type="string", nullable=false)
@@ -36,32 +40,7 @@ class Books
      * @ORM\Column(type="integer")
      */
     private $publicationYear;
-    /**
-     *  Many Books have Many Author.
-     * @ORM\ManyToMany(targetEntity="App\Entity\Author", mappedBy="Books")
-     */
-    private ArrayCollection $authors;
 
-    public function __construct()
-    {
-        $this->authors = new ArrayCollection();
-    }
-
-    /**
-     * @param ArrayCollection $authors
-     */
-    public function setAuthors(ArrayCollection $authors): void
-    {
-        $this->authors = $authors;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getAuthors(): ArrayCollection
-    {
-        return $this->authors;
-    }
 
     /**
      * @param mixed $name
@@ -130,5 +109,21 @@ class Books
     public function getPublicationYear()
     {
         return $this->publicationYear;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param mixed $author
+     */
+    public function setAuthor($author): void
+    {
+        $this->author = $author;
     }
 }

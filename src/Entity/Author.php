@@ -23,17 +23,6 @@ class Author
      * @ORM\Column(type="string", length=255)
      */
     private ?string $name;
-    /**
-     * Many Author have Many Books.
-     * @ORM\ManyToMany(targetEntity="App\Entity\Books", inversedBy="authors")
-     * @ORM\JoinTable(name="authors_books")
-     */
-    private $books;
-
-    public function __construct()
-    {
-        $this->books = new ArrayCollection();
-    }
 
 
     public function getId(): ?int
@@ -54,19 +43,5 @@ class Author
         $this->name = $name;
     }
 
-    /**
-     * @param ArrayCollection $books
-     */
-    public function setBooks(ArrayCollection $books): void
-    {
-        $this->books = $books;
-    }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getBooks(): ArrayCollection
-    {
-        return $this->books;
-    }
 }
