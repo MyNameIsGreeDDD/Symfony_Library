@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block title %} {% endblock %}
+{% block body %}
+    {% for author in authors %}
+        <a>
+            {{ author.name }}
+        </a>
+        <hr>
+    {% endfor %}
+{% endblock %}
