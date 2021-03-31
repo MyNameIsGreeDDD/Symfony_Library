@@ -1,10 +1,14 @@
 {% extends 'base.html.twig' %}
 {% block title %} {% endblock %}
 {% block body %}
+    <a href="{{ path('new_author') }}">Добавить автора</a>
+    <br>
     {% for author in authors %}
         <a>
             {{ author.name }}
         </a>
         <hr>
+        <a href="{{ path('author_delete', {'id': author.id}) }}">Удалить</a>
+        <a href="{{ path('author_edit', {'id': author.id}) }}">Редактировать</a>
     {% endfor %}
 {% endblock %}
