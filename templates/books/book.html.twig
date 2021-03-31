@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 {% block title %} {% endblock %}
 {% block body %}
+    <a href="{{ path('books') }}">Cписок книг</a>
     {{ book.name }}
     <br>
     {{ book.description }}
     <br>
-   <img src="{{ book.cover }}" >
+    <img src="{{ book.cover }}">
 {% endblock %}
