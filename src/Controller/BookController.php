@@ -60,7 +60,19 @@ class BookController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $var = $request->request->get('books');
             $cover = $request->files->get('books');
-            //Реализация редактирования
+
+            if (!empty($cover)) {
+                $cover = $cover['cover']->getRealPath();
+                $uploadDir = $this->getParameter('cover_directory');
+                $path = $uploadDir . 'CoverBook-' . rand(1, 99) . rand(1, 99) . rand(1, 99);
+                move_uploaded_file($cover, $path);
+                $book->setCover($path);
+            }
+
+            $book->setName($var['name']);
+            $book->setAuthor($var['author']);
+            $book->setDescription($var['description']);
+            $book->setPublicationYear($var['publicationYear']);
 
 
             $em = $this->getDoctrine()->getManager();
@@ -95,7 +107,7 @@ class BookController extends AbstractController
 
                 $cover = $cover['cover']->getRealPath();
                 $uploadDir = $this->getParameter('cover_directory');
-                $path = $uploadDir . 'CoverBook-' . $var['name'];
+                $path = $uploadDir . 'CoverBook-' . rand(1, 99) . rand(1, 99) . rand(1, 99);
                 move_uploaded_file($cover, $path);
 
                 $book = $form->getData();
