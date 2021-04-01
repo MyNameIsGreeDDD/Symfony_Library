@@ -59,9 +59,9 @@ class AuthorController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $var = $request->request->get('authors');
-            //Реализация редактирования
+            $var = $request->request->get('author');
 
+            $author->setName($var['name']);
 
             $em = $this->getDoctrine()->getManager();
             $em->flush();
