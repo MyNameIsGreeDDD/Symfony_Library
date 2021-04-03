@@ -1,8 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block title %} {% endblock %}
 {% block body %}
-    <a href="{{ path('new_book') }}">Добавить книгу</a>
-    <a href="{{ path('books') }}">Cписок книг</a>
+    <a href="{{ path('new_book') }}">Добавить книгу</a>|
+    <a href="{{ path('books') }}">Cписок книг</a>|
+    <a href="{{ path('authors') }}">Cписок авторов</a>|
     <br>
     {% for book in books %}
         <a href="book/{{ book.id }}">

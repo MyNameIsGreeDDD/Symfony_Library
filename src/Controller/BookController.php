@@ -7,8 +7,9 @@ namespace App\Controller;
 use App\Entity\Books;
 use App\Form\BooksType;
 use App\Repository\BooksRepository;
+use App\Services\CoverService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,23 +50,25 @@ class BookController extends AbstractController
     /**
      * @param Books $book
      * @param Request $request
-     * @Route ("/books/{id}/edit", name="book_edit")
+     * @param CoverService $coverService
      * @return Response
+     * @Route ("/books/{id}/edit", name="book_edit")
      */
-    public function edit(Books $book, Request $request): Response
+    public function edit(Books $book, Request $request, CoverService $coverService): Response
     {
-        $form = $this->createForm(BooksType::class);
+        $form = $this->createForm(BooksType::class,$book);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $var = $request->request->get('books');
             $cover = $request->files->get('books');
 
-            if (!empty($cover)) {
-                $cover = $cover['cover']->getRealPath();
+            if (!empty($cover['cover'])) {
                 $uploadDir = $this->getParameter('cover_directory');
-                $path = $uploadDir . 'CoverBook-' . rand(1, 99) . rand(1, 99) . rand(1, 99);
-                move_uploaded_file($cover, $path);
+                $dirForDeleteOldCover = $uploadDir . substr($book->getCover(), -15);
+                unlink($dirForDeleteOldCover);
+                $path = $coverService->uploadCover($cover, $uploadDir);
+
                 $book->setCover($path);
             }
 
@@ -89,13 +92,13 @@ class BookController extends AbstractController
     /**
      * @Route("/books/new", name="new_book")
      * @param Request $request
+     * @param CoverService $coverService
      * @return Response
      */
-    public function newBook(Request $request): Response
+    public function newBook(Request $request, CoverService $coverService): Response
     {
         {
             $book = new Books();
-
 
             $form = $this->createForm(BooksType::class, $book);
             $form->handleRequest($request);
@@ -105,10 +108,8 @@ class BookController extends AbstractController
                 $var = $request->request->get('books');
                 $cover = $request->files->get('books');
 
-                $cover = $cover['cover']->getRealPath();
                 $uploadDir = $this->getParameter('cover_directory');
-                $path = $uploadDir . 'CoverBook-' . rand(1, 99) . rand(1, 99) . rand(1, 99);
-                move_uploaded_file($cover, $path);
+                $path = $coverService->uploadCover($cover, $uploadDir);
 
                 $book = $form->getData();
                 $book->setName($var['name']);
@@ -116,7 +117,6 @@ class BookController extends AbstractController
                 $book->setDescription($var['description']);
                 $book->setPublicationYear($var['publicationYear']);
                 $book->setCover($path);
-
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($book);
