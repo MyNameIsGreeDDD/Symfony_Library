@@ -33,11 +33,11 @@ class Books
      */
     private $description;
     /**
-     * @ORM\Column (type="string", nullable=false)
+     * @ORM\Column (type="string", nullable=true)
      */
     private $cover;
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=false)
      */
     private $publicationYear;
 

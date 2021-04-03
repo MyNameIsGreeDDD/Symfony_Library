@@ -7,18 +7,18 @@
     <br>
     {% for book in books %}
         <a href="book/{{ book.id }}">
-            {{ book.name }}
+            {{ book.name }}<a href="{{ path('name_edit', {'id': book.id}) }}">Редактировать</a>
         </a>
         <br>
-        {{ book.description }}
+        {{ book.description }}<a href="{{ path('description_edit', {'id': book.id}) }}">Редактировать</a>
         <br>
-        {{ book.author }}
+        {{ book.author }}<a href="{{ path('author_edit', {'id': book.id}) }}">Редактировать</a>
         <br>
-        {{ book.publicationYear }}
+        {{ book.publicationYear }}<a href="{{ path('publication_year_edit', {'id': book.id}) }}">Редактировать</a>
         <br>
-        <img src="{{ book.cover }}">
+        <img src="{{ book.cover }}"><a href="{{ path('cover_edit', {'id': book.id}) }}">Редактировать</a>
+        <br>
         <a href="{{ path('book_delete', {'id': book.id}) }}">Удалить</a>
-        <a href="{{ path('book_edit', {'id': book.id}) }}">Редактировать</a>
         <hr>
     {% endfor %}
 {% endblock %}

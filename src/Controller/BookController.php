@@ -5,10 +5,14 @@ namespace App\Controller;
 
 
 use App\Entity\Books;
+use App\Form\BookAuthorEditType;
+use App\Form\BookCoverEditType;
+use App\Form\BookDescriptionEditType;
+use App\Form\BookNameEditType;
+use App\Form\BookPublicationYearEditType;
 use App\Form\BooksType;
 use App\Repository\BooksRepository;
 use App\Services\CoverService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,59 +52,18 @@ class BookController extends AbstractController
     }
 
     /**
-     * @param Books $book
-     * @param Request $request
-     * @param CoverService $coverService
-     * @return Response
-     * @Route ("/books/{id}/edit", name="book_edit")
-     */
-    public function edit(Books $book, Request $request, CoverService $coverService): Response
-    {
-        $form = $this->createForm(BooksType::class,$book);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $var = $request->request->get('books');
-            $cover = $request->files->get('books');
-
-            if (!empty($cover['cover'])) {
-                $uploadDir = $this->getParameter('cover_directory');
-                $dirForDeleteOldCover = $uploadDir . substr($book->getCover(), -15);
-                unlink($dirForDeleteOldCover);
-                $path = $coverService->uploadCover($cover, $uploadDir);
-
-                $book->setCover($path);
-            }
-
-            $book->setName($var['name']);
-            $book->setAuthor($var['author']);
-            $book->setDescription($var['description']);
-            $book->setPublicationYear($var['publicationYear']);
-
-
-            $em = $this->getDoctrine()->getManager();
-            $em->flush();
-            return $this->render('books/book.html.twig', array(
-                'book' => $book,
-            ));
-        }
-        return $this->render('books/edit.html.twig', array(
-            'form' => $form->createView(),
-        ));
-    }
-
-    /**
      * @Route("/books/new", name="new_book")
      * @param Request $request
      * @param CoverService $coverService
      * @return Response
      */
-    public function newBook(Request $request, CoverService $coverService): Response
+    public
+    function newBook(Request $request, CoverService $coverService): Response
     {
         {
             $book = new Books();
 
-            $form = $this->createForm(BooksType::class, $book);
+            $form = $this->createForm(BooksType::class);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -144,4 +107,138 @@ class BookController extends AbstractController
 
         return $this->redirectToRoute('books');
     }
+
+    /**
+     * @param Books $book
+     * @param Request $request
+     * @Route("/books/{id}/editAuthor", name="author_edit")
+     */
+    public function editAuthor(Books $book, Request $request): Response
+    {
+
+        $form = $this->createForm(BookAuthorEditType::class, $book);
+        $form->handleRequest($request);
+
+        $var = $request->request->get('book_author_edit');
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $book->setAuthor($var['author']);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($book);
+            $em->flush();
+            return $this->redirectToRoute('books');
+        }
+        return $this->render('books/edit.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * @param Books $book
+     * @param Request $request
+     * @Route("/books/{id}/editName", name="name_edit")
+     */
+    public function editName(Books $book, Request $request): Response
+    {
+        $form = $this->createForm(BookNameEditType::class, $book);
+        $form->handleRequest($request);
+
+        $var = $request->request->get('book_name_edit');
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $book->setName($var['name']);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($book);
+            $em->flush();
+            return $this->redirectToRoute('books');
+        }
+        return $this->render('books/edit.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * @param Books $book
+     * @param Request $request
+     * @Route("/books/{id}/editDescription", name="description_edit")
+     */
+    public function editDescription(Books $book, Request $request): Response
+    {
+        $form = $this->createForm(BookDescriptionEditType::class, $book);
+        $form->handleRequest($request);
+
+        $var = $request->request->get('book_description_edit');
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $book->setDescription($var['description']);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($book);
+            $em->flush();
+            return $this->redirectToRoute('books');
+        }
+        return $this->render('books/edit.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * @param Books $book
+     * @param Request $request
+     * @Route("/books/{id}/editPublicationYear", name="publication_year_edit")
+     */
+    public function editPublicationYear(Books $book, Request $request): Response
+    {
+        $form = $this->createForm(BookPublicationYearEditType::class, $book);
+        $form->handleRequest($request);
+
+        $var = $request->request->get('book_publication_year_edit');
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $book->setPublicationYear($var['publicationYear']);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($book);
+            $em->flush();
+            return $this->redirectToRoute('books');
+        }
+        return $this->render('books/edit.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * @param Books $book
+     * @param Request $request
+     * @param CoverService $coverService
+     * @return Response
+     * @Route("/books/{id}/editCover", name="cover_edit")
+     */
+    public function editCover(Books $book, Request $request, CoverService $coverService): Response
+    {
+        $form = $this->createForm(BookCoverEditType::class);
+        $form->handleRequest($request);
+
+        $cover = $request->files->get('book_cover_edit');
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $uploadDir = $this->getParameter('cover_directory');
+            $dirForDeleteOldCover = $uploadDir . substr($book->getCover(), -15);
+            unlink($dirForDeleteOldCover);
+            $path = $coverService->uploadCover($cover, $uploadDir);
+
+            $book->setCover($path);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($book);
+            $em->flush();
+            return $this->redirectToRoute('books');
+        }
+        return $this->render('books/edit.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
 }
