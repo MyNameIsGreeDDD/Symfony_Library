@@ -112,6 +112,7 @@ class BookController extends AbstractController
      * @param Books $book
      * @param Request $request
      * @Route("/books/{id}/editAuthor", name="author_edit")
+     * @return Response
      */
     public function editAuthor(Books $book, Request $request): Response
     {
@@ -239,6 +240,21 @@ class BookController extends AbstractController
         return $this->render('books/edit.html.twig', array(
             'form' => $form->createView(),
         ));
+    }
+
+    /**
+     * @Route("/books/search", name="book_search")
+     * @param Request $request
+     * @return Response
+     */
+    public function search(Request $request): Response
+    {
+        $query = $request->query->get('q');
+        $books = $this->booksRepository->searchByQuery($query);
+
+        return $this->render('books/query_book.html.twig', [
+            'books' => $books
+        ]);
     }
 
 }

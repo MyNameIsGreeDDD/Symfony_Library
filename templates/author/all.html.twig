@@ -6,10 +6,12 @@
     {% for author in authors %}
         <a>
             {{ author.name }}
+            <a href="{{ path('edit_author', {'id': author.id}) }}">Редактировать</a>
+            <a href="{{ path('author_delete', {'id': author.id}) }}">Удалить</a>
         </a>
         <br>
         <hr>
-        <a href="{{ path('author_delete', {'id': author.id}) }}">Удалить</a>
-        <a href="{{ path('author_edit', {'id': author.id}) }}">Редактировать</a>
+
+
     {% endfor %}
 {% endblock %}

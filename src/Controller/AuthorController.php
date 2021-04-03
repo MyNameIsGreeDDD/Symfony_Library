@@ -48,7 +48,7 @@ class AuthorController extends AbstractController
     }
 
     /**
-     * @Route ("/author/{id}/edit", name="author_edit")
+     * @Route ("/author/{id}/edit", name="edit_author")
      * @param Author $author
      * @param Request $request
      * @return Response

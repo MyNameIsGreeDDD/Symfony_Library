@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 {% block title %} {% endblock %}
 {% block body %}
+    <form class="form-inline my-2 my-lg-0" action="{{ path('book_search') }}" method="get">
+        <input class="form-control mr-sm-2" type="search" aria-label="Search" name="q">
+        <button class="btn btn-default my-2 my-sm-0" type="submit">Ищем</button>
+    </form>
     <a href="{{ path('new_book') }}">Добавить книгу</a>|
     <a href="{{ path('books') }}">Cписок книг</a>|
     <a href="{{ path('authors') }}">Cписок авторов</a>|

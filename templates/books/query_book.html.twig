@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Результаты поиска{% endblock %}
+
+{% block body %}
+    {% for book in books %}
+        <div>
+            <p>
+                <a href="{{ path('book', {id: book.id}) }}">{{ book.name }}</a>
+                <br>
+                {{ book.author }}
+                <br>
+                {{ book.description | slice(0, 255) ~ '...' }}
+                <br>
+                {{ book.publicationYear }}
+                <br>
+            </p>
+        </div>
+    {% endfor %}
+    <a href="{{ path('books') }}">Список книг</a>
+{% endblock %}
