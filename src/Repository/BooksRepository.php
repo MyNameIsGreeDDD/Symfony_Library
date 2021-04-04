@@ -49,8 +49,8 @@ class BooksRepository extends ServiceEntityRepository
     */
     public function searchByQuery(string $query)
     {
-        return $this->createQueryBuilder('books')
-            ->where('books.name  LIKE :query')
+        return $this->createQueryBuilder('b')
+            ->where('( b.author LIKE :query ) OR ( b.name LIKE :query ) OR ( b.description LIKE :query ) ')
             ->setParameter('query', '%' . $query . '%')
             ->getQuery()
             ->getResult();

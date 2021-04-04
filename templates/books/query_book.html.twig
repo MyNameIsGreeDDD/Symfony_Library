@@ -3,19 +3,24 @@
 {% block title %}Результаты поиска{% endblock %}
 
 {% block body %}
-    {% for book in books %}
-        <div>
-            <p>
-                <a href="{{ path('book', {id: book.id}) }}">{{ book.name }}</a>
-                <br>
-                {{ book.author }}
-                <br>
-                {{ book.description | slice(0, 255) ~ '...' }}
-                <br>
-                {{ book.publicationYear }}
-                <br>
-            </p>
-        </div>
-    {% endfor %}
+    {% if books != null %}
+        {% for book in books %}
+            <div>
+                <p>
+                    <a href="{{ path('book', {id: book.id}) }}">{{ book.name }}</a>
+                    <br>
+                    {{ book.author }}
+                    <br>
+                    {{ book.description | slice(0, 255) ~ '...' }}
+                    <br>
+                    {{ book.publicationYear }}
+                    <br>
+                </p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <a>Нет совпадений</a>
+    {% endif %}
+    <br>
     <a href="{{ path('books') }}">Список книг</a>
 {% endblock %}
