@@ -3,10 +3,14 @@
 {% block body %}
     <a href="{{ path('books') }}">Cписок книг</a>
     <br>
-    {{ book.name }}
+    Название: {{ book.name }}
     <br>
-    {{ book.description }}
+    Автор: {{ book.author }}
+    <br>
+    Описание: {{ book.description }}
     <br>
     <img src="{{ book.cover }}">
+    <br>
+     Год публикации: {{ book.publicationYear }}
     <br>
 {% endblock %}
