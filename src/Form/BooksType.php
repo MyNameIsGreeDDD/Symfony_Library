@@ -2,8 +2,11 @@
 
 namespace App\Form;
 
-use App\Entity\Books;
+use App\Entity\Author;
+use App\Entity\Book;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -18,7 +21,7 @@ class BooksType extends AbstractType
     {
         $builder
             ->add('name', TextType::class,)
-            ->add('author', TextType::class,)
+            ->add('authors', TextType::class)
             ->add('description', TextareaType::class,)
             ->add('cover', FileType::class)
             ->add('publicationYear', IntegerType::class);
@@ -27,7 +30,6 @@ class BooksType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Books::class,
         ]);
     }
 }

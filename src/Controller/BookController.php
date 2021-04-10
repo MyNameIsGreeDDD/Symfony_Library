@@ -4,7 +4,8 @@
 namespace App\Controller;
 
 
-use App\Entity\Books;
+use App\Entity\Author;
+use App\Entity\Book;
 use App\Form\BookAuthorEditType;
 use App\Form\BookCoverEditType;
 use App\Form\BookDescriptionEditType;
@@ -41,10 +42,10 @@ class BookController extends AbstractController
 
     /**
      * @Route("/book/{id}", name="book")
-     * @param Books $book
+     * @param Book $book
      * @return Response
      */
-    public function book(Books $book): Response
+    public function book(Book $book): Response
     {
         return $this->render('books/book.html.twig', [
             'book' => $book
@@ -57,11 +58,11 @@ class BookController extends AbstractController
      * @param CoverService $coverService
      * @return Response
      */
-    public
-    function newBook(Request $request, CoverService $coverService): Response
+    public function newBook(Request $request, CoverService $coverService): Response
     {
         {
-            $book = new Books();
+            $book = new Book();
+            $author = new Author();
 
             $form = $this->createForm(BooksType::class);
             $form->handleRequest($request);
@@ -74,15 +75,19 @@ class BookController extends AbstractController
                 $uploadDir = $this->getParameter('cover_directory');
                 $path = $coverService->uploadCover($cover, $uploadDir);
 
-                $book = $form->getData();
                 $book->setName($var['name']);
-                $book->setAuthor($var['author']);
                 $book->setDescription($var['description']);
                 $book->setPublicationYear($var['publicationYear']);
                 $book->setCover($path);
 
+                $author->setName($var['author']);
+
+                $book->getAuthors()->add($author);
+
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($book);
+                $em->persist($author);
                 $em->flush();
                 return $this->render('books/book.html.twig', array(
                     'book' => $book,
@@ -96,10 +101,10 @@ class BookController extends AbstractController
 
     /**
      * @Route("/books/{id}/delete", name="book_delete")
-     * @param Books $book
+     * @param Book $book
      * @return RedirectResponse
      */
-    public function delete(Books $book): RedirectResponse
+    public function delete(Book $book): RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
         $em->remove($book);
@@ -109,12 +114,12 @@ class BookController extends AbstractController
     }
 
     /**
-     * @param Books $book
+     * @param Book $book
      * @param Request $request
      * @Route("/books/{id}/editAuthor", name="author_edit")
      * @return Response
      */
-    public function editAuthor(Books $book, Request $request): Response
+    public function editAuthor(Book $book, Request $request): Response
     {
 
         $form = $this->createForm(BookAuthorEditType::class, $book);
@@ -136,11 +141,11 @@ class BookController extends AbstractController
     }
 
     /**
-     * @param Books $book
+     * @param Book $book
      * @param Request $request
      * @Route("/books/{id}/editName", name="name_edit")
      */
-    public function editName(Books $book, Request $request): Response
+    public function editName(Book $book, Request $request): Response
     {
         $form = $this->createForm(BookNameEditType::class, $book);
         $form->handleRequest($request);
@@ -161,11 +166,11 @@ class BookController extends AbstractController
     }
 
     /**
-     * @param Books $book
+     * @param Book $book
      * @param Request $request
      * @Route("/books/{id}/editDescription", name="description_edit")
      */
-    public function editDescription(Books $book, Request $request): Response
+    public function editDescription(Book $book, Request $request): Response
     {
         $form = $this->createForm(BookDescriptionEditType::class, $book);
         $form->handleRequest($request);
@@ -186,11 +191,11 @@ class BookController extends AbstractController
     }
 
     /**
-     * @param Books $book
+     * @param Book $book
      * @param Request $request
      * @Route("/books/{id}/editPublicationYear", name="publication_year_edit")
      */
-    public function editPublicationYear(Books $book, Request $request): Response
+    public function editPublicationYear(Book $book, Request $request): Response
     {
         $form = $this->createForm(BookPublicationYearEditType::class, $book);
         $form->handleRequest($request);
@@ -211,13 +216,13 @@ class BookController extends AbstractController
     }
 
     /**
-     * @param Books $book
+     * @param Book $book
      * @param Request $request
      * @param CoverService $coverService
      * @return Response
      * @Route("/books/{id}/editCover", name="cover_edit")
      */
-    public function editCover(Books $book, Request $request, CoverService $coverService): Response
+    public function editCover(Book $book, Request $request, CoverService $coverService): Response
     {
         $form = $this->createForm(BookCoverEditType::class);
         $form->handleRequest($request);

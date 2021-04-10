@@ -4,7 +4,7 @@
 namespace App\Form;
 
 
-use App\Entity\Books;
+use App\Entity\Book;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,7 +20,7 @@ class BookDescriptionEditType extends \Symfony\Component\Form\AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Books::class,
+            'data_class' => Book::class,
         ]);
     }
 }

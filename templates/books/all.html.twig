@@ -16,8 +16,6 @@
         <br>
         {{ book.description }}<a href="{{ path('description_edit', {'id': book.id}) }}">Редактировать</a>
         <br>
-        {{ book.author }}<a href="{{ path('author_edit', {'id': book.id}) }}">Редактировать</a>
-        <br>
         {{ book.publicationYear }}<a href="{{ path('publication_year_edit', {'id': book.id}) }}">Редактировать</a>
         <br>
         <img src="{{ book.cover }}"><a href="{{ path('cover_edit', {'id': book.id}) }}">Редактировать</a>

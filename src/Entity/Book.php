@@ -14,9 +14,9 @@ use Doctrine\ORM\Mapping\Table;
 
 /**
  * @ORM\Entity(repositoryClass=BooksRepository::class)
- * @Table(name="books")
+ * @Table(name="book")
  */
-class Books
+class Book
 {
     /**
      * @ORM\Id
@@ -31,10 +31,6 @@ class Books
     /**
      * @ORM\Column (type="string", nullable=false)
      */
-    private $author;
-    /**
-     * @ORM\Column (type="string", nullable=false)
-     */
     private $description;
     /**
      * @ORM\Column (type="string", nullable=true)
@@ -45,6 +41,17 @@ class Books
      */
     private $publicationYear;
 
+    /**
+     * @var Collection
+     * @ManyToMany(targetEntity="App\Entity\Author", inversedBy="books")
+     * @JoinTable(name="books_authors")
+     */
+    private Collection $authors;
+
+    public function __construct()
+    {
+        $this->authors = new ArrayCollection();
+    }
     /**
      * @param mixed $name
      */
@@ -115,18 +122,18 @@ class Books
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
-    public function getAuthor()
+    public function getAuthors(): Collection
     {
-        return $this->author;
+        return $this->authors;
     }
 
     /**
-     * @param mixed $author
+     * @param Collection $authors
      */
-    public function setAuthor($author): void
+    public function setAuthors(Collection $authors): void
     {
-        $this->author = $author;
+        $this->authors = $authors;
     }
 }

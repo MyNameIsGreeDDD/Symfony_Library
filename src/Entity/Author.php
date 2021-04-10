@@ -26,6 +26,16 @@ class Author
      * @ORM\Column(type="string", length=255)
      */
     private ?string $name;
+    /**
+     * @var Collection
+     * @ManyToMany(targetEntity="App\Entity\Book", mappedBy="authors")
+     */
+    private Collection $books;
+
+    public function __construct()
+    {
+        $this->books = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -46,5 +56,11 @@ class Author
         $this->name = $name;
     }
 
-
+    /**
+     * @return Collection
+     */
+    public function getBooks(): Collection
+    {
+        return $this->books;
+    }
 }
